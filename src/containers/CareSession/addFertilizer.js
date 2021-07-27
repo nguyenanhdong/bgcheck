@@ -1,12 +1,11 @@
 import React, { Component, useEffect, useState, useCallback } from "react";
-import { View, Image, ScrollView, ActivityIndicator, FlatList, Vibration } from 'react-native';
+import { View, Image, ScrollView, ActivityIndicator,Keyboard,Alert} from 'react-native';
 import Text from '@components/Text';
 import TouchableOpacity from '@components/TouchableOpacity';
 import SafeAreaView from '@components/SafeAreaView';
 import axios from 'axios';
-import FastImage from 'react-native-fast-image';
 import { useSelector, useDispatch } from "react-redux";
-import { colorDefault, deviceWidth, deviceHeight, isAndroid, urlAPI, headersRequest, SwipeRow } from '@assets/constants';
+import { colorDefault, deviceWidth, deviceHeight, isAndroid, urlAPI, headersRequest, SwipeRow,BASE_URL } from '@assets/constants';
 import { Container, Content, Button, ListItem, Form, Item, Input, Label, Textarea } from 'native-base';
 import HeaderComp from '@components/HeaderComp';
 import { TouchableRipple } from 'react-native-paper';
@@ -20,32 +19,102 @@ const addFertilizer = (props) => {
     const onGoBack = () => {
         props.navigation.goBack()
     }
-
+    const userInfo = useSelector(state => state.app.userInfo);
     const [showtime, Setshowtime] = useState(false);
     const [date, setDate] = useState(new Date());
-    const SelectProduct = (index, value) => {
-        setProduct(value);
+    const [KhuVucBon, setKhuVucBon] = useState('');
+    const [NguoiBon, setNguoiBon] = useState('');
+    const [PhuongThucBon, setPhuongThucBon] = useState('');
+    const [ThuongPhamPhanBon, setThuongPhamPhanBon] = useState('');
+    const [LuongPhanSuDung, setLuongPhanSuDung] = useState('');
+    const [loading, setLoading] = useState(false);
+    const DotChamSoc_Id = props.navigation?.state?.params?.DotChamSoc_Id || 0;
+    console.log('DotChamSoc_Id',DotChamSoc_Id)
+    const validate = () => {
+        if (!NguoiBon) {
+            Alert.alert('Bạn cần điền đẩy đủ thông tin các trường có dấu *');
+            return false
+        }
+        return true
     }
     const addCare = () => {
-        showMessage({
-            message: 'Thêm mới sổ theo dõi phân bón thành công',
-            duration: 3000,
-            type: "success",
-            icon: 'success'
-        });
-        props.navigation.goBack()
+        if (!validate()) return
+        Keyboard.dismiss();
+        if (loading) return;
+
+        setLoading(true);
+        let dataInput = {
+            CompanyId: userInfo?.DepartmentId,
+            NguoiTao: userInfo.Id,
+            Id: 0,
+            DotChamSoc_Id:DotChamSoc_Id,
+            NgayBon:moment(date).format('DD/MM/YYYY'),
+            KhuVucBon:KhuVucBon,
+            NguoiBon:NguoiBon,
+            PhuongThucBon:PhuongThucBon,
+            ThuongPhamPhanBon:ThuongPhamPhanBon,
+            LuongPhanSuDung:LuongPhanSuDung
+        }
+        console.log('dataInput', dataInput);
+        axios.post(`${BASE_URL}API/CreatePhanBon`, dataInput, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => {
+                console.log('response CreatePhanBon', response);
+                if (response.status == 200 && response.data) {
+                    // setData(response.data);
+                    showMessage({
+                        message: 'Thêm mới sổ theo dõi phân bón thành công',
+                        duration: 3000,
+                        type: "success",
+                        icon: 'success'
+                    });
+                    props.navigation.state.params.refreshTab(4);
+                    props.navigation.goBack();
+                } else
+                    showMessage({
+                        message: 'Có lỗi xảy ra. Vui lòng thử lại sau ít phút!',
+                        duration: 3000,
+                        type: "danger",
+                        icon: 'danger'
+                    });
+            })
+            .catch(function (error) {
+                console.log('error', error)
+                showMessage({
+                    message: 'Có lỗi xảy ra. Vui lòng tắt thoát app và thử lại !',
+                    duration: 3000,
+                    type: "danger",
+                    icon: 'danger'
+                });
+            })
+            .finally(function () {
+                setLoading(false);
+            });
+       
     }
     const handleConfirm = date => {
-        setDate(date)
+        setDate(date);
+        Setshowtime(false);
+        console.log('handleConfirm')
     }
     const dismiss = () => {
         Setshowtime(false)
     }
-    const deleteNote = ()=>{
-
+    const showModalTime = ()=>{
+        console.log('showTime');
+        Setshowtime(true);
     }
     return (
         <Container style={{ backgroundColor: '#fff' }}>
+            {loading &&
+                <View style={styles.css_loading}>
+                    <ActivityIndicator animating size="large" color={'#fff'} />
+                </View>
+            }
             <HeaderComp
                 centerComponent={{
                     text: 'Thêm mới sổ theo dõi phân bón',
@@ -68,12 +137,12 @@ const addFertilizer = (props) => {
             <Content>
                 <Form >
                     <Item stackedLabel>
-                        <Label>Ngày chăm sóc</Label>
+                        <Label>Ngày chăm sóc<Text style={{color:'red'}}>*</Text></Label>
                         <TouchableOpacity
-                            onPress={() => Setshowtime(true)}
-                            style={{flexDirection:'row',justifyContent:'space-between',width:deviceWidth - 15,paddingTop:15}}
+                            onPress={showModalTime}
+                            style={{flexDirection:'row',justifyContent:'space-between',width:deviceWidth - 25,paddingTop:15}}
                         >
-                            <Text>{moment(date).format('DD-MM-YYYY')}</Text>
+                            <Text style={styles.Input}>{moment(date).format('DD-MM-YYYY')}</Text>
                             <Image
                                 source={require('@assets/Images/Common/calendar.png')}
                                 style={styles.icon_input}
@@ -81,27 +150,27 @@ const addFertilizer = (props) => {
                         </TouchableOpacity>
                     </Item>
                     <Item stackedLabel>
-                        <Label>Người thực hiện</Label>
-                        <Input style={styles.Input} />
+                        <Label>Người bón<Text style={{color:'red'}}>*</Text></Label>
+                        <Input style={styles.Input} onChangeText={setNguoiBon} value={NguoiBon}/>
                     </Item>
 
                     <Item stackedLabel>
                         <Label>Khu vực bón</Label>
-                        <Input style={styles.Input} />
+                        <Input style={styles.Input} onChangeText={setKhuVucBon} value={KhuVucBon}/>
                     </Item>
                     <Item stackedLabel>
                         <Label>Phương thức bón</Label>
-                        <Input style={styles.Input} />
+                        <Input style={styles.Input} onChangeText={setPhuongThucBon} value={PhuongThucBon}/>
                         {/* <Textarea rowSpan={5} bordered placeholder="Textarea" /> */}
                     </Item>
                     <Item stackedLabel>
                         <Label>Tên thương phẩm</Label>
-                        <Input style={styles.Input} />
+                        <Input style={styles.Input} onChangeText={setThuongPhamPhanBon} value={ThuongPhamPhanBon}/>
                         {/* <Textarea rowSpan={5} bordered placeholder="Textarea" /> */}
                     </Item>
                     <Item stackedLabel>
                         <Label>Lượng phân sử dụng</Label>
-                        <Input style={styles.Input} />
+                        <Input style={styles.Input} onChangeText={setLuongPhanSuDung} value={LuongPhanSuDung}/>
                         {/* <Textarea rowSpan={5} bordered placeholder="Textarea" /> */}
                     </Item>
                     <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 20 }}>
@@ -169,5 +238,15 @@ const styles = {
         width:20,
         height:20,
         resizeMode:'contain'
-    }
+    },
+    css_loading: {
+        position: 'absolute',
+        zIndex: 2,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        height: '100%',
+        borderWidth: 1,
+        backgroundColor: 'rgba(0,0,0,0.5)'
+    },
 }

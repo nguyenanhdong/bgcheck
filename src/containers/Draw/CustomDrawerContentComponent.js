@@ -36,6 +36,7 @@ const routerLogin = [
 ]
 const CustomDrawerContentComponent = (props) => {
   const isLogin = useSelector(state => state.app.isLogin);
+  const userInfo = useSelector(state => state.app.userInfo);
   const dispatch = useDispatch();
   const login = ()=>{
     console.log('login');
@@ -67,10 +68,10 @@ const CustomDrawerContentComponent = (props) => {
   <Container>
    
     <ListItem style={styles.drawerHeader}  noIndent>
-      <Thumbnail large source={require('@assets/Images/Common/avatar.png')} style={{marginRight:20}}/>
+      <Thumbnail large source={userInfo?.Avatar ? {uri:userInfo?.Avatar}  : require('@assets/Images/Common/avatar.png')} style={{marginRight:20}}/>
       <Body>
         <Text>Xin chào</Text>
-        { isLogin ? <Text style={{color:colorDefault,fontSize:15}}>Nguyễn Anh Đông</Text>:
+        { isLogin ? <Text style={{color:colorDefault,fontSize:15}}>{userInfo?.DisplayName}</Text>:
         <TouchableRipple  
         style={{justifyContent:'center',alignItems:'flex-start',height:40}}
       onPress = {login}

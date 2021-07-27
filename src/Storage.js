@@ -2,7 +2,7 @@ import Storage from 'react-native-storage';
 import AsyncStorage from '@react-native-community/async-storage'
 export default storage = new Storage({
   // maximum capacity, default 1000
-  size: 5000,
+  size: 50000,
 
   // Use AsyncStorage for RN apps, or window.localStorage for web apps.
   // If storageBackend is not set, data will be lost after reload.

@@ -33,11 +33,14 @@ const App = (props) => {
                 }}
                 showDraw={_Draw}
             />
-            <Content>
-                <HomeSlide />
-            </Content >
+            <View style={{justifyContent:'center',flex:1}}>
+                <View style={{top:-60}}><HomeSlide /></View>
+                
+            </View>
+            
+           
             <Button full 
-            style={{backgroundColor:colorDefault,justifyContent:'center',alignItems:'center',height:60}}
+            style={{backgroundColor:colorDefault,justifyContent:'center',alignItems:'center',height:60,position:'absolute',bottom:0,width:'100%'}}
             onPress = {goCheck}
             >
                 <Text style={{color:'#fff'}}>Kiểm tra mã</Text>

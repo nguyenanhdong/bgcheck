@@ -22,7 +22,14 @@ class App extends React.Component {
   }
   
   componentDidMount() {
-    
+    Storage.load({
+      key: 'userInfo'
+  }).then(result => {
+      let userInfo = JSON.parse(result);
+      store.dispatch({type:'loginSuccess',data:userInfo});
+  }).catch(err => {
+      
+  });
   }
   render() {
     return (

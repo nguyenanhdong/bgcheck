@@ -1,17 +1,14 @@
 import React, { Component, useEffect, useState, useCallback } from "react";
-import { View, Image, ScrollView, ActivityIndicator, FlatList, Vibration } from 'react-native';
+import { View, Image, ActivityIndicator, Alert,Keyboard} from 'react-native';
 import Text from '@components/Text';
 import TouchableOpacity from '@components/TouchableOpacity';
-import SafeAreaView from '@components/SafeAreaView';
 import axios from 'axios';
-import FastImage from 'react-native-fast-image';
 import { useSelector, useDispatch } from "react-redux";
-import { colorDefault, deviceWidth, deviceHeight, isAndroid, urlAPI, headersRequest, SwipeRow } from '@assets/constants';
+import { colorDefault, deviceWidth, deviceHeight, isAndroid, urlAPI, headersRequest, SwipeRow,BASE_URL } from '@assets/constants';
 import { Container, Content, Button, ListItem, Form, Item, Input, Label, Textarea } from 'native-base';
 import HeaderComp from '@components/HeaderComp';
 import { TouchableRipple } from 'react-native-paper';
 import { fontSize, scale } from '@assets/config/RatioScale';
-import ModalDropdown from '@components/ModalDropDown';
 import { showMessage } from 'react-native-flash-message';
 import moment from 'moment';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -20,29 +17,100 @@ const addCaregarden = (props) => {
     const onGoBack = () => {
         props.navigation.goBack()
     }
-
+    const [loading, setLoading] = useState(false);
+    const userInfo = useSelector(state => state.app.userInfo);
     const [showtime, Setshowtime] = useState(false);
     const [date, setDate] = useState(new Date());
-    const SelectProduct = (index, value) => {
-        setProduct(value);
+    const [Nguoithuchien, setNguoithuchien] = useState('');
+    const [khuvuc, setKhuvuc] = useState('');
+    const [hoatdong, setHoatdong] = useState('');
+    const [ghichu, setGhichu] = useState('');
+    const DotChamSoc_Id = props.navigation?.state?.params?.DotChamSoc_Id || 0;
+    
+    const validate = () => {
+        if (!Nguoithuchien) {
+            Alert.alert('Bạn cần điền đẩy đủ thông tin các tường có dấu *');
+            return false
+        }
+        return true
     }
     const addCare = () => {
-        showMessage({
-            message: 'Thêm mới sổ theo dõi chăm sóc vườn thành công',
-            duration: 3000,
-            type: "success",
-            icon: 'success'
-        });
-        props.navigation.goBack()
+        if (!validate()) return
+        Keyboard.dismiss();
+        if (loading) return;
+
+        setLoading(true);
+        let dataInput = {
+            CompanyId: userInfo?.DepartmentId,
+            NguoiTao: userInfo.Id,
+            Id: 0,
+            DotChamSoc_Id:DotChamSoc_Id,
+            GhiChu:ghichu,
+            NgayChamSoc:moment(date).format('DD/MM/YYYY'),
+            HoatDong:hoatdong,
+            KhuVucTacDong:khuvuc,
+            NguoiThucHien:Nguoithuchien
+        }
+        console.log('dataInput', dataInput);
+        axios.post(`${BASE_URL}API/CreateChamSocVuon`, dataInput, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        })
+            .then((response) => {
+                console.log('response CreateChamSocVuon', response);
+                if (response.status == 200 && response.data) {
+                    // setData(response.data);
+                    showMessage({
+                        message: 'Thêm mới sổ theo dõi chăm sóc vườn thành công',
+                        duration: 3000,
+                        type: "success",
+                        icon: 'success'
+                    });
+                    props.navigation.state.params.refreshTab(2);
+                    props.navigation.goBack()
+                } else
+                    showMessage({
+                        message: 'Có lỗi xảy ra. Vui lòng thử lại sau ít phút!',
+                        duration: 3000,
+                        type: "danger",
+                        icon: 'danger'
+                    });
+            })
+            .catch(function (error) {
+                console.log('error', error)
+                showMessage({
+                    message: 'Có lỗi xảy ra. Vui lòng tắt thoát app và thử lại !',
+                    duration: 3000,
+                    type: "danger",
+                    icon: 'danger'
+                });
+            })
+            .finally(function () {
+                setLoading(false);
+            });
+        
     }
     const handleConfirm = date => {
-        setDate(date)
+        setDate(date);
+        Setshowtime(false);
+        console.log('handleConfirm')
     }
     const dismiss = () => {
         Setshowtime(false)
     }
+    const showModalTime = ()=>{
+        console.log('showTime');
+        Setshowtime(true);
+    }
     return (
         <Container style={{ backgroundColor: '#fff' }}>
+            {loading &&
+                <View style={styles.css_loading}>
+                    <ActivityIndicator animating size="large" color={'#fff'} />
+                </View>
+            }
             <HeaderComp
                 centerComponent={{
                     text: 'Thêm mới sổ theo dõi chăm sóc vườn',
@@ -55,12 +123,12 @@ const addCaregarden = (props) => {
             <Content>
                 <Form >
                     <Item stackedLabel>
-                        <Label>Ngày chăm sóc</Label>
+                        <Label>Ngày chăm sóc<Text style={{color:'red'}}>*</Text></Label>
                         <TouchableOpacity
-                            onPress={() => Setshowtime(true)}
-                            style={{flexDirection:'row',justifyContent:'space-between',width:deviceWidth - 15,paddingTop:15}}
+                            onPress={showModalTime}
+                            style={{flexDirection:'row',justifyContent:'space-between',width:deviceWidth - 25,paddingTop:15}}
                         >
-                            <Text>{moment(date).format('DD-MM-YYYY')}</Text>
+                            <Text style={styles.Input}>{moment(date).format('DD-MM-YYYY')}</Text>
                             <Image
                                 source={require('@assets/Images/Common/calendar.png')}
                                 style={styles.icon_input}
@@ -68,27 +136,22 @@ const addCaregarden = (props) => {
                         </TouchableOpacity>
                     </Item>
                     <Item stackedLabel>
-                        <Label>Người thực hiện</Label>
-                        <Input style={styles.Input} />
+                        <Label>Người thực hiện<Text style={{color:'red'}}>*</Text></Label>
+                        <Input style={styles.Input} onChangeText={setNguoithuchien} value={Nguoithuchien}/>
                     </Item>
 
                     <Item stackedLabel>
                         <Label>Khu vực tác động</Label>
-                        <Input style={styles.Input} />
+                        <Input style={styles.Input} onChangeText={setKhuvuc} value={khuvuc}/>
                     </Item>
                     <Item stackedLabel>
                         <Label>Hoạt động</Label>
-                        <Input style={styles.Input} />
-                        {/* <Textarea rowSpan={5} bordered placeholder="Textarea" /> */}
-                    </Item>
-                    <Item stackedLabel>
-                        <Label>Khối lượng</Label>
-                        <Input style={styles.Input} />
+                        <Input style={styles.Input} onChangeText={setHoatdong} value={hoatdong}/>
                         {/* <Textarea rowSpan={5} bordered placeholder="Textarea" /> */}
                     </Item>
                     <Item stackedLabel>
                         <Label>Ghi chú</Label>
-                        <Input style={styles.Input} />
+                        <Input style={styles.Input} onChangeText={setGhichu} value={ghichu}/>
                         {/* <Textarea rowSpan={5} bordered placeholder="Textarea" /> */}
                     </Item>
                     <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 20 }}>
@@ -156,5 +219,15 @@ const styles = {
         width:20,
         height:20,
         resizeMode:'contain'
-    }
+    },
+    css_loading: {
+        position: 'absolute',
+        zIndex: 2,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        height: '100%',
+        borderWidth: 1,
+        backgroundColor: 'rgba(0,0,0,0.5)'
+    },
 }

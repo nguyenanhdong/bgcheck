@@ -29,7 +29,7 @@ const AppNavigator = createStackNavigator(
     {
         headerMode: 'none',
         initialRouteName: 'Draw',
-        // initialRouteName: 'AddFertilizer',
+        // initialRouteName: 'ProductDetail',
         mode: 'modal',
         defaultNavigationOptions: {
             // cardOverlayEnabled: true,

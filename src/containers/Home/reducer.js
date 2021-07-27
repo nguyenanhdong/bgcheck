@@ -1,21 +1,29 @@
 import Storage from '@src/Storage';
 const initialState = {
-    isLogin:false,
-    userInfo:null
+    isLogin: false,
+    userInfo: null
 };
 
 const app = (state = initialState, action = {}) => {
     switch (action.type) {
         case 'loginSuccess':
-            return{
+            Storage.save({
+                key: 'userInfo', // Note: Do not use underscore("_") in key!
+                data: JSON.stringify(action.data)
+            });
+            return {
                 ...state,
-                isLogin:true
+                userInfo: action.data,
+                isLogin: true
             }
         case 'logout':
-            return{
+            Storage.remove({
+                key: 'userInfo', // Note: Do not use underscore("_") in key!
+            });
+            return {
                 ...state,
-                isLogin:false,
-                userInfo:null
+                isLogin: false,
+                userInfo: null
             }
         default:
             return state;

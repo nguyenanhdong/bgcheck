@@ -6,22 +6,17 @@ import SafeAreaView from '@components/SafeAreaView';
 import axios from 'axios';
 import FastImage from 'react-native-fast-image';
 import { useSelector, useDispatch } from "react-redux";
-import { colorDefault, deviceWidth, deviceHeight, isAndroid, urlAPI, headersRequest } from '@assets/constants';
+import { colorDefault, deviceWidth, deviceHeight, isAndroid, urlAPI, headersRequest,BASE_URL } from '@assets/constants';
 import { Container, Content } from 'native-base';
-const App = (props) => {
-  
+import { WebView } from 'react-native-webview';
+
+const Tab1 = (props) => {
+    let ProductId = props.ProductId;
     return (
-        <Container style={{}}>
-            <Content
-                contentContainerStyle={{}}
-            >
-                <Text>Diary</Text>
-            </Content >
-        </Container>
+        <WebView source={{ uri: `${BASE_URL}Portal/ChiTiet?productId=${ProductId}` }} />
     )
 }
-
-export default App;
+export default Tab1;
 
 const styles = {
     container: {
