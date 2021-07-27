@@ -46,12 +46,13 @@ const DetailCare = (props) => {
         return;
     }
 }
-  const { id } = props.navigation.state.params;
+  const { item } = props.navigation.state.params;
+  const id  = item?.Id || 0;
   return (
     <Container style={{ backgroundColor: '#fff' }}>
       <HeaderComp
         centerComponent={{
-          text: 'Đợt chăm sóc cuối năm',
+          text: item?.Ten || '',
           style: {color: 'white'}
         }}
         goBack={onGoBack}

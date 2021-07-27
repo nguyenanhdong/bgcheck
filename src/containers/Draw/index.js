@@ -28,7 +28,7 @@ const Drawer = createDrawerNavigator(
     CareSession:{
         screen:CareSession,
         navigationOptions:{
-          title:'Đợt chăm sóc'
+          title:'Nhật ký '
         }
     },
     // Login:{

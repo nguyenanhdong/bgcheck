@@ -33,7 +33,7 @@ const App = (props) => {
         { key: 'first', title: 'Thông tin' },
         { key: 'second', title: 'Đại lý - NCC' },
         { key: 'three', title: 'Đánh giá' },
-        { key: 'four', title: 'Đợt chăm sóc' },
+        { key: 'four', title: 'Nhật ký ' },
     ]);
     const [index, setIndex] = React.useState(0);
     const productInfo = props.navigation.state.params.productInfo;

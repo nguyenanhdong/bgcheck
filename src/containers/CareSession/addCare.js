@@ -113,7 +113,7 @@ const App = (props) => {
                 if (response.status == 200 && response.data) {
                     // setData(response.data);
                     showMessage({
-                        message: 'Chỉnh sửa đợt chăm sóc thành công',
+                        message: 'Chỉnh sửa nhật ký thành công',
                         duration: 3000,
                         type: "success",
                         icon: 'success'
@@ -173,7 +173,7 @@ const App = (props) => {
                 if (response.status == 200 && response.data) {
                     // setData(response.data);
                     showMessage({
-                        message: 'Thêm đợt chăm sóc thành công',
+                        message: 'Thêm nhật ký thành công',
                         duration: 3000,
                         type: "success",
                         icon: 'success'
@@ -210,7 +210,7 @@ const App = (props) => {
             }
             <HeaderComp
                 centerComponent={{
-                    text: 'Thêm đợt chăm sóc',
+                    text: 'Thêm nhật ký ',
                     style: {
                         color: 'white',
                     }
@@ -220,7 +220,7 @@ const App = (props) => {
             <Content>
                 <Form >
                     <Item stackedLabel>
-                        <Label>Tên đợt chăm sóc</Label>
+                        <Label>Tên nhật ký </Label>
                         <Input style={styles.Input} onChangeText={setNameCare} value={nameCare} />
                     </Item>
                     <Item stackedLabel bordered >
@@ -232,7 +232,8 @@ const App = (props) => {
                             dropdownTextStyle={{ fontSize: 15, color: '#515C6F', paddingLeft: 15 }}
                             dropdownTextHighlightStyle={{ color: colorDefault }}
                             onSelect={(index, value) => SelectProduct(index, value)}
-                            renderSeparator={() => <View />}
+                            // renderSeparator={() => <View />}
+                            // renderRow = {renderItem}
                         >
                             <View style={styles.box_select}>
                                 <Text style={[styles.text_selected]}>{productText}</Text>
@@ -279,7 +280,8 @@ const styles = {
     },
     dropdown: {
         width: deviceWidth, height: 260, overflow: 'hidden', borderBottomLeftRadius: 5, borderBottomRightRadius: 5,
-        marginTop: isAndroid ? -25 : 0
+        marginTop: isAndroid ? -30 : 0,
+        borderColor:'#000'
     },
     text_selected: {
         // color: '#6a6a6d',

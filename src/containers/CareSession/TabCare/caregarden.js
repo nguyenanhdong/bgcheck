@@ -80,7 +80,7 @@ const App = forwardRef((props,ref) => {
                 console.log('response product', response);
                 if (response.status == 200) {
                     showMessage({
-                        message: 'Xoá đợt chăm sóc vườn thành công',
+                        message: 'Xoá nhật ký vườn thành công',
                         duration: 3000,
                         type: "success",
                         icon: 'success'
@@ -109,7 +109,7 @@ const App = forwardRef((props,ref) => {
     }
     const deleteItem = item => {
         Alert.alert(
-            `Bạn có thật sự muốn xoá đợt chăm sóc vườn này`,
+            `Bạn có thật sự muốn xoá nhật ký vườn này`,
             '',
             [
                 {

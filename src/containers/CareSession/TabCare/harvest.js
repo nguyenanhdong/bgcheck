@@ -80,7 +80,7 @@ const App = forwardRef((props,ref) => {
                 console.log('response product', response);
                 if (response.status == 200) {
                     showMessage({
-                        message: 'Xoá đợt chăm sóc thành công',
+                        message: 'Xoá nhật ký thành công',
                         duration: 3000,
                         type: "success",
                         icon: 'success'

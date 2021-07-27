@@ -31,7 +31,7 @@ const App = (props) => {
     }, []);
     const getdata = () => {
         // if (loading) return;
-        console.log('get data')
+        console.log('get data');
         setLoading(true);
         axios.get(`${BASE_URL}API/GetListDotChamSoc?dep=${userInfo?.DepartmentId}&pageIndex=1&pageSize=40`, {}, {
             headers: {
@@ -71,7 +71,7 @@ const App = (props) => {
     }
     const goDetail = (item) => {
         console.log('21123', item)
-        props.navigation.navigate('DetailCare', { id: item.Id })
+        props.navigation.navigate('DetailCare', { item})
     }
     const addCareSession = () => {
         console.log('123')
@@ -94,7 +94,7 @@ const App = (props) => {
                 console.log('response product', response);
                 if (response.status == 200) {
                     showMessage({
-                        message: 'Xoá đợt chăm sóc thành công',
+                        message: 'Xoá nhật ký thành công',
                         duration: 3000,
                         type: "success",
                         icon: 'success'
@@ -123,7 +123,7 @@ const App = (props) => {
     }
     const deleteItem = item => {
         Alert.alert(
-            `Bạn có thật sự muốn xoá đợt chăm sóc: ${item.Ten}`,
+            `Bạn có thật sự muốn xoá nhật ký : ${item.Ten}`,
             '',
             [
                 {
@@ -173,7 +173,7 @@ const App = (props) => {
             }
             <HeaderComp
                 centerComponent={{
-                    text: 'Đợt chăm sóc',
+                    text: 'Nhật ký',
                     style: {
                         color: 'white',
                     }
@@ -202,7 +202,7 @@ const App = (props) => {
                     onRefresh: getdata
                 }}
                 emptyViewProps={{
-                    bigTitle: 'Đợt chăm sóc rỗng',
+                    bigTitle: 'Nhật ký rỗng',
                     bigTitleStyle: {
                         color: 'black',
                         fontSize: 14
