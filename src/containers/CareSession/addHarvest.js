@@ -1,12 +1,12 @@
 import React, { Component, useEffect, useState, useCallback } from "react";
-import { View, Image, ScrollView, ActivityIndicator, FlatList, Vibration,Keyboard ,Alert} from 'react-native';
+import { View, Image, ScrollView, ActivityIndicator, FlatList, Vibration, Keyboard, Alert } from 'react-native';
 import Text from '@components/Text';
 import TouchableOpacity from '@components/TouchableOpacity';
 import SafeAreaView from '@components/SafeAreaView';
 import axios from 'axios';
 import FastImage from 'react-native-fast-image';
 import { useSelector, useDispatch } from "react-redux";
-import { colorDefault, deviceWidth, deviceHeight, isAndroid, urlAPI, headersRequest, SwipeRow,BASE_URL } from '@assets/constants';
+import { colorDefault, deviceWidth, deviceHeight, isAndroid, urlAPI, headersRequest, SwipeRow, BASE_URL } from '@assets/constants';
 import { Container, Content, Button, ListItem, Form, Item, Input, Label, Textarea } from 'native-base';
 import HeaderComp from '@components/HeaderComp';
 import { TouchableRipple } from 'react-native-paper';
@@ -14,7 +14,8 @@ import { fontSize, scale } from '@assets/config/RatioScale';
 import ModalDropdown from '@components/ModalDropDown';
 import { showMessage } from 'react-native-flash-message';
 import moment from 'moment';
-import DateTimePickerModal from "react-native-modal-datetime-picker";
+import DatePicker from 'react-native-date-picker'
+import Modal from 'react-native-modalbox';
 
 const addHarvest = (props) => {
     const onGoBack = () => {
@@ -29,7 +30,7 @@ const addHarvest = (props) => {
     const [Note, setNote] = useState('');
     const [loading, setLoading] = useState(false);
     const DotChamSoc_Id = props.navigation?.state?.params?.DotChamSoc_Id || 0;
-    console.log('DotChamSoc_Id',props.navigation?.state?.params)
+    console.log('DotChamSoc_Id', props.navigation?.state?.params)
     const validate = () => {
         if (!MaTruyXuat || !khoiluong) {
             Alert.alert('Bạn cần điền đẩy đủ thông tin các trường có dấu *');
@@ -47,14 +48,13 @@ const addHarvest = (props) => {
             CompanyId: userInfo?.DepartmentId,
             NguoiTao: userInfo.Id,
             Id: 0,
-            DotChamSoc_Id:DotChamSoc_Id,
-            MaTruyXuat:MaTruyXuat,
-            VatChuaSo:vatchua,
-            KhoiLuong:khoiluong,
-            GhiChu:Note,
-            NgayThuHoach:moment(date).format('DD/MM/YYYY')
+            DotChamSoc_Id: DotChamSoc_Id,
+            MaTruyXuat: MaTruyXuat,
+            VatChuaSo: vatchua,
+            KhoiLuong: khoiluong,
+            GhiChu: Note,
+            NgayThuHoach: moment(date).format('DD/MM/YYYY')
         }
-        console.log('dataInput', dataInput);
         axios.post(`${BASE_URL}API/CreateThuHoach`, dataInput, {
             headers: {
                 'Accept': 'application/json',
@@ -96,13 +96,12 @@ const addHarvest = (props) => {
     }
     const handleConfirm = date => {
         setDate(date);
-        Setshowtime(false);
         console.log('handleConfirm')
     }
     const dismiss = () => {
         Setshowtime(false)
     }
-    const showModalTime = ()=>{
+    const showModalTime = () => {
         console.log('showTime');
         Setshowtime(true);
     }
@@ -125,7 +124,7 @@ const addHarvest = (props) => {
             <Content>
                 <Form >
                     <Item stackedLabel>
-                        <Label>Ngày thu hoạch<Text style={{color:'red'}}>*</Text></Label>
+                        <Label>Ngày thu hoạch<Text style={{ color: 'red' }}>*</Text></Label>
                         <TouchableOpacity
                             onPress={showModalTime}
                             style={{ flexDirection: 'row', justifyContent: 'space-between', width: deviceWidth - 25, paddingTop: 15 }}
@@ -138,7 +137,7 @@ const addHarvest = (props) => {
                         </TouchableOpacity>
                     </Item>
                     <Item stackedLabel>
-                        <Label>Mã truy xuất<Text style={{color:'red'}}>*</Text></Label>
+                        <Label>Mã truy xuất<Text style={{ color: 'red' }}>*</Text></Label>
                         <Input style={styles.Input} onChangeText={setMaTruyXuat} value={MaTruyXuat} />
                     </Item>
 
@@ -147,7 +146,7 @@ const addHarvest = (props) => {
                         <Input style={styles.Input} onChangeText={setVatchua} value={vatchua} />
                     </Item>
                     <Item stackedLabel>
-                        <Label>Khối lượng<Text style={{color:'red'}}>*</Text></Label>
+                        <Label>Khối lượng<Text style={{ color: 'red' }}>*</Text></Label>
                         <Input style={styles.Input} onChangeText={setKhoiluong} value={khoiluong} />
                         {/* <Textarea rowSpan={5} bordered placeholder="Textarea" /> */}
                     </Item>
@@ -165,16 +164,40 @@ const addHarvest = (props) => {
                     </View>
 
                 </Form>
-                <DateTimePickerModal
+                {/* <DateTimePickerModal
                     isVisible={showtime}
                     mode="date"
                     date={date}
                     onConfirm={handleConfirm}
                     onCancel={dismiss}
                     display={'spinner'}
-                />
-            </Content>
+                /> */}
 
+                
+            </Content>
+            <Modal
+                    style={{ width: '90%', height: 320, borderRadius: 10, paddingVertical: 20, justifyContent: 'center', alignItems: 'center' }}
+                    swipeToClose={false}
+                    onClosed={dismiss}
+                    backdropPressToClose={false}
+                    // onOpened={this.onOpen}
+                    backButtonClose={false}
+                    position={"center"}
+                    isOpen={showtime}
+                >
+                    {/* <Text style={[styles.text, { fontSize: 20 }]}>{this.state.type == 'start' ? 'Ngày cấp thẻ cư trú' : 'Ngày hết hạn thẻ cư trú'}</Text> */}
+                    <DatePicker
+                        locale={'vi'}
+                        date={date}
+                        mode={'date'}
+                        onDateChange={handleConfirm}
+                    />
+                    <TouchableOpacity style={{ width: 100, height: 40, borderRadius: 10, backgroundColor: colorDefault, justifyContent: 'center', alignItems: 'center', marginTop: 20 }}
+                        onPress={dismiss}
+                    >
+                        <Text style={{ color: '#fff' }}>Xong</Text>
+                    </TouchableOpacity>
+                </Modal>
         </Container>
     )
 }

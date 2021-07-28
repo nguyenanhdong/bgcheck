@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     txt_or: { color: '#000' },
     view_apple: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#000', paddingVertical: 10, paddingHorizontal: 20, width: deviceWidth - 40, borderRadius: 5, marginBottom: 20 },
     view_facebook: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#4E6297', paddingVertical: 10, paddingHorizontal: 20, width: deviceWidth - 40, borderRadius: 5 },
-    img_logo: { width: deviceWidth / 3, height: deviceWidth / 3 + 40, resizeMode: 'contain' },
+    img_logo: { width: 230, height: 230, resizeMode: 'contain' },
     css_loading: {
         position: 'absolute',
         zIndex: 2,

@@ -181,7 +181,7 @@ const App = (props) => {
                 showDraw={_Draw}
                 rightComponent={<TouchableRipple
                     onPress={addCareSession}
-                    style={{ padding: 10 }}
+                    style={{ paddingVertical: 10 }}
                 >
                     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                         <Image source={require('@assets/Images/Common/add.png')} style={{ width: scale(15), height: scale(15), resizeMode: 'contain' }} />

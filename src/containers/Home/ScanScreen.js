@@ -12,6 +12,8 @@ import { showMessage } from 'react-native-flash-message';
 import moment from "moment";
 import Load from "./load";
 import { debounce } from "lodash";
+import { Container, Content, Button, ListItem, ScrollableTab, Tab, Tabs } from 'native-base';
+
 const AREA_WIDTH = deviceWidth / 3 * 2;
 const ScanScreen = (props) => {
     let unmounted = false;
@@ -129,7 +131,7 @@ const ScanScreen = (props) => {
             (scanResult.type == "QR_CODE" || scanResult.type == "org.iso.QRCode")
             && scanResult.data != null
             && (
-                scanResult.data.indexOf(BASE_URL) == 0
+                scanResult.data.indexOf(BASE_URL) == 0 || scanResult.data.indexOf('http://113.160.154.188:1102') == 0
             )
         ) {
             if (!unmounted) {
@@ -139,7 +141,7 @@ const ScanScreen = (props) => {
             }
             return;
         } else {
-            console.log('vao day',showAlert)
+            console.log('vao day', showAlert)
             if (!showAlert) {
                 showAlert = true;
                 Alert.alert('Mã QR không đúng',
@@ -154,50 +156,57 @@ const ScanScreen = (props) => {
             }
         }
     }
-    return <RNCamera
-        flashMode={isLight ? RNCamera.Constants.FlashMode.torch : RNCamera.Constants.FlashMode.off}
-        onCameraReady={handleCameraReady}
-        style={StyleSheet.absoluteFillObject}
-        onBarCodeRead={unmounted ? null : onBarCodeRead}
-        captureAudio={false}
-    >
-        <View style={[StyleSheet.absoluteFill, {
-            flexDirection: "column",
-        }]}>
-            {console.log('render')}
-            <Load ref={ref => BoxLoad = ref} />
-            <HeaderComp
-                goBack={() => props.navigation.goBack()}
-            />
-            <View
-                style={{
-                    flex: 1,
-                    paddingHorizontal: 30,
-                    paddingVertical: 50,
-                    justifyContent: "space-between",
-                    alignItems: "center"
-                }}
-            >
-                {/* <SubmitCodeText
-                    width={AREA_WIDTH}
-                    setlayout={setlayoutInput}
-                /> */}
+    const goback = () => {
+        console.log('goback');
+        props.navigation.goBack()
+    }
+    return (
+        <RNCamera
+            flashMode={isLight ? RNCamera.Constants.FlashMode.torch : RNCamera.Constants.FlashMode.off}
+            onCameraReady={handleCameraReady}
+            style={StyleSheet.absoluteFillObject}
+            onBarCodeRead={unmounted ? null : onBarCodeRead}
+            captureAudio={false}
+        >
+
+            <View style={[StyleSheet.absoluteFill, {
+                flexDirection: "column",
+            }]}>
+                <Load ref={ref => BoxLoad = ref} />
+                <HeaderComp
+                    goBack={goback}
+                    centerComponent={{
+                        text: 'Quét QRcode',
+                        style: { color: 'white' }
+                    }}
+                />
                 <View
-                    onLayout={(event) => {
-                        setAreaLayout(event.nativeEvent.layout)
-                    }}>
-                    <ImageBackground
-                        source={require("@assets/Images/Common/scan_bg.png")}
-                        style={{
-                            width: AREA_WIDTH, height: AREA_WIDTH,
-                            alignSelf: "center",
-                        }}
-                    >
-                    </ImageBackground>
+                    style={{
+                        flex: 1,
+                        paddingHorizontal: 30,
+                        paddingVertical: 50,
+                        justifyContent: "space-between",
+                        alignItems: "center"
+                    }}
+                >
+
+                    <View
+                        onLayout={(event) => {
+                            setAreaLayout(event.nativeEvent.layout)
+                        }}>
+                        <ImageBackground
+                            source={require("@assets/Images/Common/scan_bg.png")}
+                            style={{
+                                width: AREA_WIDTH, height: AREA_WIDTH,
+                                alignSelf: "center",
+                            }}
+                        >
+                        </ImageBackground>
+                    </View>
+                    <Text style={{ color: '#fff' }}>{"Kiểm tra thông tin sản phẩm"}</Text>
                 </View>
-                <Text style={{ color: '#fff' }}>{"Kiểm tra thông tin sản phẩm"}</Text>
             </View>
-        </View>
-    </RNCamera>
+        </RNCamera>
+    )
 }
 export default ScanScreen;

@@ -19,23 +19,24 @@ const HeaderComp = (props) => {
             height: HEADER_HEIGHT,
             borderBottomColor: null, 
             borderBottomWidth: 0,
+            zIndex:100
         }}
         backgroundImageStyle={{
             resizeMode: "stretch",
         }}
         backgroundImage={CommonImage.SCAN_HEADER_BG}
         centerComponent={<Image
-            style={{ height: "50%", resizeMode: "contain" }}
+            style={{ height: "70%", resizeMode: "contain" }}
             source={CommonImage.HEADER_LOGO}
         />}
         leftComponent={
-            <TouchableRipple
+            <TouchableOpacity
                 onPress={() => props.goBack ? props.goBack():  props.showDraw()}
-                hitSlop={{ top: 20, right: 20, bottom: 20, left: 20 }}
-                style={{padding:10}}
+                // hitSlop={{ top: 20, right: 20, bottom: 20, left: 20 }}
+                style={{padding:10,zIndex:101,width:40,height:40}}
             >
                 <Image source={props.goBack ? CommonImage.HEADER_BACK : CommonImage.Draw} />
-            </TouchableRipple>
+            </TouchableOpacity>
             }
             
         {...props}

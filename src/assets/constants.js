@@ -24,7 +24,8 @@ const { height: D_HEIGHT, width: D_WIDTH } = Dimensions.get('window');
 const X_WIDTH = 375;
 const X_HEIGHT = 812;
 
-export const colorDefault = '#0347c0';
+// export const colorDefault = '#0347c0';
+export const colorDefault = '#4b9cc5';
 export const backgroundDefault = 'rgba(196, 196, 196, 0.2)';
 
 // const { PlatformConstants = {} } = NativeModules;

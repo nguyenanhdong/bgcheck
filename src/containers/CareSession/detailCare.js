@@ -1,8 +1,7 @@
 import React, { Component, useEffect, useState, useCallback,useRef } from "react";
-import { View, Image, ScrollView, ActivityIndicator, FlatList, Vibration } from 'react-native';
+import { View, Image, ScrollView, ActivityIndicator, FlatList, Vibration,SafeAreaView } from 'react-native';
 import Text from '@components/Text';
 import TouchableOpacity from '@components/TouchableOpacity';
-import SafeAreaView from '@components/SafeAreaView';
 import axios from 'axios';
 import FastImage from 'react-native-fast-image';
 import { useSelector, useDispatch } from "react-redux";
@@ -49,6 +48,7 @@ const DetailCare = (props) => {
   const { item } = props.navigation.state.params;
   const id  = item?.Id || 0;
   return (
+    
     <Container style={{ backgroundColor: '#fff' }}>
       <HeaderComp
         centerComponent={{
@@ -58,37 +58,47 @@ const DetailCare = (props) => {
         goBack={onGoBack}
       />
       <Tabs renderTabBar={() => <ScrollableTab
-        style={{ backgroundColor: '#CBCBCB' }}
+        style={isAndroid ? { backgroundColor: '#CBCBCB'} :{ marginBottom:20,height:60 } }
+        underlineStyle = {{backgroundColor:'#fff'}}
       />}
         tabBarPosition='bottom'
+       
       >
         <Tab heading="Thu hoạch"
           tabStyle={{ backgroundColor: colorDefault }}
           activeTabStyle={{ backgroundColor: colorDefault }}
-         
+          textStyle = {{color:'#f5f5f5'}}
+          activeTextStyle = {{color:'#fff'}}
         >
           <Harvest addRow={addRow} id={id} refreshTab={refreshTab}   ref = {tab1}/>
         </Tab>
         <Tab heading="Chăm sóc vườn"
           tabStyle={{ backgroundColor: colorDefault }}
           activeTabStyle={{ backgroundColor: colorDefault }}
+          textStyle = {{color:'#f5f5f5'}}
+          activeTextStyle = {{color:'#fff'}}
         >
           <Caregarden addRow={addRow} id={id} refreshTab={refreshTab}  ref = {tab2}/>
         </Tab>
         <Tab heading="Thuốc BVTV"
           tabStyle={{ backgroundColor: colorDefault }}
           activeTabStyle={{ backgroundColor: colorDefault }}
+          textStyle = {{color:'#f5f5f5'}}
+          activeTextStyle = {{color:'#fff'}}
         >
           <ProtectProduct addRow={addRow} id={id} refreshTab={refreshTab}  ref = {tab3}/>
         </Tab>
         <Tab heading="Phân bón"
           tabStyle={{ backgroundColor: colorDefault }}
           activeTabStyle={{ backgroundColor: colorDefault }}
+          textStyle = {{color:'#f5f5f5'}}
+          activeTextStyle = {{color:'#fff'}}
         >
           <Fertilizer addRow={addRow} id={id} refreshTab={refreshTab} ref = {tab4}/>
         </Tab>
       </Tabs>
     </Container>
+    
   )
 }
 

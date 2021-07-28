@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>bnCheck</string>
+	<string>bgCheck</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -13,7 +13,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>bnCheck</string>
+	<string>bgCheck</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -38,13 +38,13 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>bnCheck muốn sử dụng Camera để quét mã QR Code</string>
+	<string>bgCheck muốn sử dụng Camera để quét mã QR Code</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>bnCheck muốn truy cập vào thư viện ảnh để tải ảnh quét QR code</string>
+	<string>bgCheck muốn truy cập vào thư viện ảnh để tải ảnh quét QR code</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>bnCheck muốn truy cập vào thư viện ảnh để tải ảnh quét QR code</string>
+	<string>bgCheck muốn truy cập vào thư viện ảnh để tải ảnh quét QR code</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>

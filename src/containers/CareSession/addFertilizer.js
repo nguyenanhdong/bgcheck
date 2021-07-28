@@ -13,8 +13,9 @@ import { fontSize, scale } from '@assets/config/RatioScale';
 import ModalDropdown from '@components/ModalDropDown';
 import { showMessage } from 'react-native-flash-message';
 import moment from 'moment';
-import DateTimePickerModal from "react-native-modal-datetime-picker";
-
+// import DateTimePickerModal from "react-native-modal-datetime-picker";
+import Modal from 'react-native-modalbox';
+import DatePicker from 'react-native-date-picker'
 const addFertilizer = (props) => {
     const onGoBack = () => {
         props.navigation.goBack()
@@ -98,7 +99,6 @@ const addFertilizer = (props) => {
     }
     const handleConfirm = date => {
         setDate(date);
-        Setshowtime(false);
         console.log('handleConfirm')
     }
     const dismiss = () => {
@@ -182,16 +182,38 @@ const addFertilizer = (props) => {
                     </View>
 
                 </Form>
-                <DateTimePickerModal
+                {/* <DateTimePickerModal
                     isVisible={showtime}
                     mode="date"
                     date={date}
                     onConfirm={handleConfirm}
                     onCancel={dismiss}
                     display={'spinner'}
-                />
+                /> */}
             </Content>
-
+            <Modal
+                    style={{ width: '90%', height: 320, borderRadius: 10, paddingVertical: 20, justifyContent: 'center', alignItems: 'center' }}
+                    swipeToClose={false}
+                    onClosed={dismiss}
+                    backdropPressToClose={false}
+                    // onOpened={this.onOpen}
+                    backButtonClose={false}
+                    position={"center"}
+                    isOpen={showtime}
+                >
+                    {/* <Text style={[styles.text, { fontSize: 20 }]}>{this.state.type == 'start' ? 'Ngày cấp thẻ cư trú' : 'Ngày hết hạn thẻ cư trú'}</Text> */}
+                    <DatePicker
+                        locale={'vi'}
+                        date={date}
+                        mode={'date'}
+                        onDateChange={handleConfirm}
+                    />
+                    <TouchableOpacity style={{ width: 100, height: 40, borderRadius: 10, backgroundColor: colorDefault, justifyContent: 'center', alignItems: 'center', marginTop: 20 }}
+                        onPress={dismiss}
+                    >
+                        <Text style={{ color: '#fff' }}>Xong</Text>
+                    </TouchableOpacity>
+                </Modal>
         </Container>
     )
 }
