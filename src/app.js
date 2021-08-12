@@ -6,7 +6,7 @@ import AppContainer from '@containers/StackNavigation';
 import { StatusBar, Platform, View, Alert, SafeAreaView, Vibration } from "react-native";
 import SplashScreen from 'react-native-splash-screen'
 const store = configureStore();
-import { Themebackground, isAndroid, oneSignalID,urlAPI, headersRequest } from '@assets/constants';
+import { Themebackground, isAndroid, oneSignalID,urlAPI, headersRequest,BASE_URL } from '@assets/constants';
 import FlashMessage from "react-native-flash-message";
 import TitleBar from '@components/TitleScreen/TitleBar';
 // import Toast from 'react-native-toast-message'
@@ -23,13 +23,38 @@ class App extends React.Component {
   
   componentDidMount() {
     Storage.load({
-      key: 'userInfo'
+      key: 'userLogin'
   }).then(result => {
-      let userInfo = JSON.parse(result);
-      store.dispatch({type:'loginSuccess',data:userInfo});
+      let dataLogin = JSON.parse(result);
+      this.login(dataLogin);
   }).catch(err => {
       
   });
+  }
+  login = (dataLogin)=>{
+    axios.post(`${BASE_URL}API/Login`, dataLogin, {
+      headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'X-localization': 'vi'
+      },
+  })
+      .then((response) => {
+          console.log('response Login', response);
+          if (response.status == 200) {
+              let resJson = response.data;
+              if (resJson.error_code == 0) {
+                  let data = resJson.data;
+                  data.Token = resJson.Token
+                  // store. dispatch(loginSuccess(data));
+                  store.dispatch({type:'loginSuccess',data:data});
+              } 
+          }
+      })
+      .catch(function (error) {
+          console.log('error', error)
+          
+      })
   }
   render() {
     return (

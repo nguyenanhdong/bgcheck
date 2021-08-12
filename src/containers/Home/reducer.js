@@ -7,6 +7,7 @@ const initialState = {
 const app = (state = initialState, action = {}) => {
     switch (action.type) {
         case 'loginSuccess':
+            console.log('action.data',action.data)
             Storage.save({
                 key: 'userInfo', // Note: Do not use underscore("_") in key!
                 data: JSON.stringify(action.data)
@@ -19,6 +20,9 @@ const app = (state = initialState, action = {}) => {
         case 'logout':
             Storage.remove({
                 key: 'userInfo', // Note: Do not use underscore("_") in key!
+            });
+            Storage.remove({
+                key: 'userLogin', // Note: Do not use underscore("_") in key!
             });
             return {
                 ...state,

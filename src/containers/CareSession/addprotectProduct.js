@@ -39,7 +39,6 @@ const addprotectProduct = (props) => {
         setProduct(value);
         setBinhPhunMayPhun(index+1)
     }
-    console.log('DotChamSoc_Id', DotChamSoc_Id)
     const validate = () => {
         if (!NguoiDung || !ThuongPhamHoatChat) {
             Alert.alert('Bạn cần điền đẩy đủ thông tin các trường có dấu *');
@@ -54,18 +53,21 @@ const addprotectProduct = (props) => {
 
         setLoading(true);
         let dataInput = {
-            CompanyId: userInfo?.DepartmentId,
-            NguoiTao: userInfo.Id,
-            Id: 0,
-            DotChamSoc_Id: DotChamSoc_Id,
-            NgayDung: moment(date).format('DD/MM/YYYY'),
-            NguoiDung:NguoiDung,
-            MucDich:MucDich,
-            PhuongThuc:PhuongThuc,
-            ThuongPhamHoatChat:ThuongPhamHoatChat,
-            LuongThuocSuDung:LuongThuocSuDung,
-            BinhPhunMayPhun:BinhPhunMayPhun,
-            ChuKy:ChuKy
+            model: {
+                CompanyId: userInfo?.DepartmentId,
+                NguoiTao: userInfo.Id,
+                Id: 0,
+                DotChamSoc_Id: DotChamSoc_Id,
+                NgayDung: moment(date).format('DD/MM/YYYY'),
+                NguoiDung:NguoiDung,
+                MucDich:MucDich,
+                PhuongThuc:PhuongThuc,
+                ThuongPhamHoatChat:ThuongPhamHoatChat,
+                LuongThuocSuDung:LuongThuocSuDung,
+                BinhPhunMayPhun:BinhPhunMayPhun,
+                ChuKy:ChuKy
+            },
+            token: userInfo.Token
         }
         console.log('dataInput', dataInput);
         axios.post(`${BASE_URL}API/CreateThuocBVTV`, dataInput, {
@@ -138,7 +140,7 @@ const addprotectProduct = (props) => {
             <Content>
                 <Form >
                     <Item stackedLabel>
-                        <Label>Ngày dùng</Label>
+                        <Label style={{fontWeight:'bold'}}>Ngày dùng</Label>
                         <TouchableOpacity
                             onPress={showModalTime}
                             style={{ flexDirection: 'row', justifyContent: 'space-between', width: deviceWidth - 25, paddingTop: 15 }}
@@ -152,36 +154,36 @@ const addprotectProduct = (props) => {
                     </Item>
 
                     <Item stackedLabel>
-                        <Label>Người dùng<Text style={{color:'red'}}>*</Text></Label>
+                        <Label style={{fontWeight:'bold'}}>Người dùng<Text style={{color:'red'}}>*</Text></Label>
                         <Input style={styles.Input} onChangeText={setNguoiDung} value={NguoiDung}/>
                     </Item>
                     <Item stackedLabel>
-                        <Label>Mục đích</Label>
+                        <Label style={{fontWeight:'bold'}}>Mục đích</Label>
                         <Input style={styles.Input} onChangeText={setMucDich} value={MucDich} />
                         {/* <Textarea rowSpan={5} bordered placeholder="Textarea" /> */}
                     </Item>
                     <Item stackedLabel>
-                        <Label>Phương thức sử dụng</Label>
+                        <Label style={{fontWeight:'bold'}}>Phương thức sử dụng</Label>
                         <Input style={styles.Input}  onChangeText={setPhuongThuc} value={PhuongThuc}/>
                         {/* <Textarea rowSpan={5} bordered placeholder="Textarea" /> */}
                     </Item>
                     <Item stackedLabel>
-                        <Label>Tên thương phẩm- hoạt chất<Text style={{color:'red'}}>*</Text></Label>
+                        <Label style={{fontWeight:'bold'}}>Tên thương phẩm- hoạt chất<Text style={{color:'red'}}>*</Text></Label>
                         <Input style={styles.Input}  onChangeText={setThuongPhamHoatChat} value={ThuongPhamHoatChat}/>
                         {/* <Textarea rowSpan={5} bordered placeholder="Textarea" /> */}
                     </Item>
                     <Item stackedLabel>
-                        <Label>Lượng sử dụng</Label>
+                        <Label style={{fontWeight:'bold'}}>Lượng sử dụng</Label>
                         <Input style={styles.Input}  onChangeText={setLuongThuocSuDung} value={LuongThuocSuDung}/>
                         {/* <Textarea rowSpan={5} bordered placeholder="Textarea" /> */}
                     </Item>
                     <Item stackedLabel bordered >
                         {/* <Label stackedLabel style={styles.textlabel}>Giới tính</Label> */}
-                        <Label stackedLabel>Bình phun/ Máy phun</Label>
+                        <Label style={{fontWeight:'bold'}}>Bình phun/ Máy phun</Label>
                         <ModalDropdown
                             options={arrProduct}
                             dropdownStyle={styles.dropdown}
-                            dropdownTextStyle={{ fontSize: fontSize(15), color: '#515C6F', paddingLeft: 15 }}
+                            dropdownTextStyle={{ fontSize: 15, color: '#515C6F', paddingLeft: 15 }}
                             dropdownTextHighlightStyle={{ color: colorDefault }}
                             onSelect={(index, value) => SelectProduct(index, value)}
                             renderSeparator={() => <View />}
@@ -198,7 +200,7 @@ const addprotectProduct = (props) => {
                         {/* <Text style={{ color: 'red' }}>{this.state.errorRequest?.gender}</Text> */}
                     </Item>
                     <Item stackedLabel>
-                        <Label>Chu kỳ</Label>
+                        <Label style={{fontWeight:'bold'}}>Chu kỳ</Label>
                         <Input style={styles.Input}  onChangeText={setChuKy} value={ChuKy}/>
                         {/* <Textarea rowSpan={5} bordered placeholder="Textarea" /> */}
                     </Item>
@@ -284,7 +286,7 @@ const styles = {
         marginBottom: 10,
     },
     Input: {
-        fontSize: fontSize(15), color: '#515C6F'
+        fontSize: 15, color: '#515C6F'
     },
     view_phone: { flexDirection: 'row', alignItems: 'center', backgroundColor: colorDefault, borderRadius: 5, justifyContent: 'center', height: 50, width: 200, marginTop: 20 },
     txt_login_phone: { color: '#fff', fontWeight: '700' },

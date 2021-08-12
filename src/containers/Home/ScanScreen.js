@@ -144,7 +144,7 @@ const ScanScreen = (props) => {
             console.log('vao day', showAlert)
             if (!showAlert) {
                 showAlert = true;
-                Alert.alert('Mã QR không đúng',
+                Alert.alert('Sản phẩm chưa đăng ký trên cổng',
                     '',
                     [
                         {

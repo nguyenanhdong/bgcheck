@@ -99,8 +99,8 @@ const App = (props) => {
         }
         return true
     }
-    const editCare = (dataInput)=>{
-        console.log('dataInput dataInput',dataInput);
+    const editCare = (dataInput) => {
+        console.log('dataInput dataInput', dataInput);
         axios.post(`${BASE_URL}Api/UpdateDotChamSoc`, dataInput, {
             headers: {
                 'Accept': 'application/json',
@@ -117,7 +117,7 @@ const App = (props) => {
                         duration: 3000,
                         type: "success",
                         icon: 'success'
-                      });
+                    });
                     // props.navigation.goBack()
                 } else
                     showMessage({
@@ -141,27 +141,30 @@ const App = (props) => {
             });
     }
     const addCare = () => {
-        
+
         if (!validate()) return
         Keyboard.dismiss();
         if (loading) return;
-        
+
         setLoading(true);
         let dataInput = {
-            CompanyId: userInfo?.DepartmentId,
-            Ten: nameCare,
-            MaSoHoTrong: idCare,
-            SanPhamId: product.Id,
-            MoTa: des,
-            NguoiTao: userInfo.Id,
-            Id: item?.Id || 0
+            model: {
+                CompanyId: userInfo?.DepartmentId,
+                Ten: nameCare,
+                MaSoHoTrong: idCare,
+                SanPhamId: product.Id,
+                MoTa: des, 
+                NguoiTao: userInfo.Id,
+                Id: item?.Id || 0
+            },
+            token:userInfo.Token
         }
-        if(item){
+        if (item) {
             editCare(dataInput);
             return;
         }
         console.log('dataInput', dataInput);
-        console.log('url',`${BASE_URL}API/Createdotchamsoc`);
+        console.log('url', `${BASE_URL}API/Createdotchamsoc`);
         axios.post(`${BASE_URL}API/Createdotchamsoc`, dataInput, {
             headers: {
                 'Accept': 'application/json',
@@ -177,7 +180,7 @@ const App = (props) => {
                         duration: 3000,
                         type: "success",
                         icon: 'success'
-                      });
+                    });
                     props.navigation.goBack()
                 } else
                     showMessage({
@@ -220,20 +223,20 @@ const App = (props) => {
             <Content>
                 <Form >
                     <Item stackedLabel>
-                        <Label>Tên nhật ký </Label>
+                        <Label style={{fontWeight:'bold'}}>Tên nhật ký </Label>
                         <Input style={styles.Input} onChangeText={setNameCare} value={nameCare} />
                     </Item>
                     <Item stackedLabel bordered >
                         {/* <Label stackedLabel style={styles.textlabel}>Giới tính</Label> */}
-                        <Label stackedLabel>Sản phẩm</Label>
+                        <Label style={{fontWeight:'bold'}}>Sản phẩm</Label>
                         <ModalDropdown
                             options={dataDisplay}
                             dropdownStyle={styles.dropdown}
                             dropdownTextStyle={{ fontSize: 15, color: '#515C6F', paddingLeft: 15 }}
                             dropdownTextHighlightStyle={{ color: colorDefault }}
                             onSelect={(index, value) => SelectProduct(index, value)}
-                            // renderSeparator={() => <View />}
-                            // renderRow = {renderItem}
+                        // renderSeparator={() => <View />}
+                        // renderRow = {renderItem}
                         >
                             <View style={styles.box_select}>
                                 <Text style={[styles.text_selected]}>{productText}</Text>
@@ -247,11 +250,11 @@ const App = (props) => {
                         {/* <Text style={{ color: 'red' }}>{this.state.errorRequest?.gender}</Text> */}
                     </Item>
                     <Item stackedLabel>
-                        <Label>Mã số hộ trồng</Label>
+                        <Label style={{fontWeight:'bold'}}>Mã số hộ trồng</Label>
                         <Input style={styles.Input} onChangeText={setIdCare} value={idCare} />
                     </Item>
                     <Item stackedLabel>
-                        <Label>Mô tả</Label>
+                        <Label style={{fontWeight:'bold'}}>Mô tả</Label>
                         <Input style={styles.Input} onChangeText={setDes} value={des} />
                         {/* <Textarea rowSpan={5} bordered placeholder="Textarea" /> */}
                     </Item>
@@ -281,7 +284,7 @@ const styles = {
     dropdown: {
         width: deviceWidth, height: 260, overflow: 'hidden', borderBottomLeftRadius: 5, borderBottomRightRadius: 5,
         marginTop: isAndroid ? -30 : 0,
-        borderColor:'#000'
+        borderColor: '#000'
     },
     text_selected: {
         // color: '#6a6a6d',
@@ -298,7 +301,7 @@ const styles = {
         justifyContent: 'space-between',
         marginTop: 20,
         width: deviceWidth,
-        paddingRight:15
+        paddingRight: 15
 
         // backgroundColor: "#F0F2F8"
     },

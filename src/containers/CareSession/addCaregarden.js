@@ -43,15 +43,18 @@ const addCaregarden = (props) => {
 
         setLoading(true);
         let dataInput = {
-            CompanyId: userInfo?.DepartmentId,
-            NguoiTao: userInfo.Id,
-            Id: 0,
-            DotChamSoc_Id: DotChamSoc_Id,
-            GhiChu: ghichu,
-            NgayChamSoc: moment(date).format('DD/MM/YYYY'),
-            HoatDong: hoatdong,
-            KhuVucTacDong: khuvuc,
-            NguoiThucHien: Nguoithuchien
+            model: {
+                CompanyId: userInfo?.DepartmentId,
+                NguoiTao: userInfo.Id,
+                Id: 0,
+                DotChamSoc_Id: DotChamSoc_Id,
+                GhiChu: ghichu,
+                NgayChamSoc: moment(date).format('DD/MM/YYYY'),
+                HoatDong: hoatdong,
+                KhuVucTacDong: khuvuc,
+                NguoiThucHien: Nguoithuchien
+            },
+            token: userInfo.Token
         }
         console.log('dataInput', dataInput);
         axios.post(`${BASE_URL}API/CreateChamSocVuon`, dataInput, {
@@ -124,7 +127,7 @@ const addCaregarden = (props) => {
             <Content>
                 <Form >
                     <Item stackedLabel>
-                        <Label>Ngày chăm sóc<Text style={{ color: 'red' }}>*</Text></Label>
+                        <Label style={{fontWeight:'bold'}}>Ngày chăm sóc<Text style={{ color: 'red' }}>*</Text></Label>
                         <TouchableOpacity
                             onPress={showModalTime}
                             style={{ flexDirection: 'row', justifyContent: 'space-between', width: deviceWidth - 25, paddingTop: 15 }}
@@ -137,21 +140,21 @@ const addCaregarden = (props) => {
                         </TouchableOpacity>
                     </Item>
                     <Item stackedLabel>
-                        <Label>Người thực hiện<Text style={{ color: 'red' }}>*</Text></Label>
+                        <Label style={{fontWeight:'bold'}}>Người thực hiện<Text style={{ color: 'red' }}>*</Text></Label>
                         <Input style={styles.Input} onChangeText={setNguoithuchien} value={Nguoithuchien} />
                     </Item>
 
                     <Item stackedLabel>
-                        <Label>Khu vực tác động</Label>
+                        <Label style={{fontWeight:'bold'}}>Khu vực tác động</Label>
                         <Input style={styles.Input} onChangeText={setKhuvuc} value={khuvuc} />
                     </Item>
                     <Item stackedLabel>
-                        <Label>Hoạt động</Label>
+                        <Label style={{fontWeight:'bold'}}>Hoạt động</Label>
                         <Input style={styles.Input} onChangeText={setHoatdong} value={hoatdong} />
                         {/* <Textarea rowSpan={5} bordered placeholder="Textarea" /> */}
                     </Item>
                     <Item stackedLabel>
-                        <Label>Ghi chú</Label>
+                        <Label style={{fontWeight:'bold'}}>Ghi chú</Label>
                         <Input style={styles.Input} onChangeText={setGhichu} value={ghichu} />
                         {/* <Textarea rowSpan={5} bordered placeholder="Textarea" /> */}
                     </Item>
@@ -234,7 +237,7 @@ const styles = {
         marginBottom: 10,
     },
     Input: {
-        fontSize: fontSize(15), color: '#515C6F'
+        fontSize: 15, color: '#515C6F'
     },
     view_phone: { flexDirection: 'row', alignItems: 'center', backgroundColor: colorDefault, borderRadius: 5, justifyContent: 'center', height: 50, width: 200, marginTop: 20 },
     txt_login_phone: { color: '#fff', fontWeight: '700' },

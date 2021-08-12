@@ -77,8 +77,8 @@ export default class Slideshow extends Component {
 
     this.state = {
       position: 0,
-      height: Dimensions.get('window').width * (4 / 9),
-      width: Dimensions.get('window').width,
+      height: '100%',
+      width:'100%',
       scrolling: false,
     };
   }

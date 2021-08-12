@@ -1,11 +1,11 @@
 import React, { Component, useEffect, useState, useCallback } from "react";
-import { View, Image, ScrollView, ActivityIndicator,Keyboard,Alert} from 'react-native';
+import { View, Image, ScrollView, ActivityIndicator, Keyboard, Alert } from 'react-native';
 import Text from '@components/Text';
 import TouchableOpacity from '@components/TouchableOpacity';
 import SafeAreaView from '@components/SafeAreaView';
 import axios from 'axios';
 import { useSelector, useDispatch } from "react-redux";
-import { colorDefault, deviceWidth, deviceHeight, isAndroid, urlAPI, headersRequest, SwipeRow,BASE_URL } from '@assets/constants';
+import { colorDefault, deviceWidth, deviceHeight, isAndroid, urlAPI, headersRequest, SwipeRow, BASE_URL } from '@assets/constants';
 import { Container, Content, Button, ListItem, Form, Item, Input, Label, Textarea } from 'native-base';
 import HeaderComp from '@components/HeaderComp';
 import { TouchableRipple } from 'react-native-paper';
@@ -30,7 +30,6 @@ const addFertilizer = (props) => {
     const [LuongPhanSuDung, setLuongPhanSuDung] = useState('');
     const [loading, setLoading] = useState(false);
     const DotChamSoc_Id = props.navigation?.state?.params?.DotChamSoc_Id || 0;
-    console.log('DotChamSoc_Id',DotChamSoc_Id)
     const validate = () => {
         if (!NguoiBon) {
             Alert.alert('Bạn cần điền đẩy đủ thông tin các trường có dấu *');
@@ -45,16 +44,20 @@ const addFertilizer = (props) => {
 
         setLoading(true);
         let dataInput = {
-            CompanyId: userInfo?.DepartmentId,
-            NguoiTao: userInfo.Id,
-            Id: 0,
-            DotChamSoc_Id:DotChamSoc_Id,
-            NgayBon:moment(date).format('DD/MM/YYYY'),
-            KhuVucBon:KhuVucBon,
-            NguoiBon:NguoiBon,
-            PhuongThucBon:PhuongThucBon,
-            ThuongPhamPhanBon:ThuongPhamPhanBon,
-            LuongPhanSuDung:LuongPhanSuDung
+
+            model: {
+                CompanyId: userInfo?.DepartmentId,
+                NguoiTao: userInfo.Id,
+                Id: 0,
+                DotChamSoc_Id: DotChamSoc_Id,
+                NgayBon: moment(date).format('DD/MM/YYYY'),
+                KhuVucBon: KhuVucBon,
+                NguoiBon: NguoiBon,
+                PhuongThucBon: PhuongThucBon,
+                ThuongPhamPhanBon: ThuongPhamPhanBon,
+                LuongPhanSuDung: LuongPhanSuDung
+            },
+            token: userInfo.Token
         }
         console.log('dataInput', dataInput);
         axios.post(`${BASE_URL}API/CreatePhanBon`, dataInput, {
@@ -95,7 +98,7 @@ const addFertilizer = (props) => {
             .finally(function () {
                 setLoading(false);
             });
-       
+
     }
     const handleConfirm = date => {
         setDate(date);
@@ -104,7 +107,7 @@ const addFertilizer = (props) => {
     const dismiss = () => {
         Setshowtime(false)
     }
-    const showModalTime = ()=>{
+    const showModalTime = () => {
         console.log('showTime');
         Setshowtime(true);
     }
@@ -123,24 +126,24 @@ const addFertilizer = (props) => {
                     }
                 }}
                 goBack={onGoBack}
-                // rightComponent={<TouchableRipple
-                //     onPress={deleteNote}
-                //    style={{padding:10}}
-                // >
-                //     <View  style={{ justifyContent: 'center', alignItems: 'center' }}>
-                //         <Image source={require('@assets/Images/Common/trash.png')} style={{ width: scale(15), height: scale(15), resizeMode: 'contain' }} />
-                //         <Text style={{ fontSize: fontSize(12), color: "#fff", fontWeight: "bold"}}>Xoá theo dõi</Text>
-                //         </View>
+            // rightComponent={<TouchableRipple
+            //     onPress={deleteNote}
+            //    style={{padding:10}}
+            // >
+            //     <View  style={{ justifyContent: 'center', alignItems: 'center' }}>
+            //         <Image source={require('@assets/Images/Common/trash.png')} style={{ width: scale(15), height: scale(15), resizeMode: 'contain' }} />
+            //         <Text style={{ fontSize: fontSize(12), color: "#fff", fontWeight: "bold"}}>Xoá theo dõi</Text>
+            //         </View>
 
-                // </TouchableRipple>}
+            // </TouchableRipple>}
             />
             <Content>
                 <Form >
                     <Item stackedLabel>
-                        <Label>Ngày chăm sóc<Text style={{color:'red'}}>*</Text></Label>
+                        <Label style={{fontWeight:'bold'}}>Ngày chăm sóc<Text style={{ color: 'red' }}>*</Text></Label>
                         <TouchableOpacity
                             onPress={showModalTime}
-                            style={{flexDirection:'row',justifyContent:'space-between',width:deviceWidth - 25,paddingTop:15}}
+                            style={{ flexDirection: 'row', justifyContent: 'space-between', width: deviceWidth - 25, paddingTop: 15 }}
                         >
                             <Text style={styles.Input}>{moment(date).format('DD-MM-YYYY')}</Text>
                             <Image
@@ -150,27 +153,27 @@ const addFertilizer = (props) => {
                         </TouchableOpacity>
                     </Item>
                     <Item stackedLabel>
-                        <Label>Người bón<Text style={{color:'red'}}>*</Text></Label>
-                        <Input style={styles.Input} onChangeText={setNguoiBon} value={NguoiBon}/>
+                        <Label style={{fontWeight:'bold'}}>Người bón<Text style={{ color: 'red' }}>*</Text></Label>
+                        <Input style={styles.Input} onChangeText={setNguoiBon} value={NguoiBon} />
                     </Item>
 
                     <Item stackedLabel>
-                        <Label>Khu vực bón</Label>
-                        <Input style={styles.Input} onChangeText={setKhuVucBon} value={KhuVucBon}/>
+                        <Label style={{fontWeight:'bold'}}>Khu vực bón</Label>
+                        <Input style={styles.Input} onChangeText={setKhuVucBon} value={KhuVucBon} />
                     </Item>
                     <Item stackedLabel>
-                        <Label>Phương thức bón</Label>
-                        <Input style={styles.Input} onChangeText={setPhuongThucBon} value={PhuongThucBon}/>
+                        <Label style={{fontWeight:'bold'}}>Phương thức bón</Label>
+                        <Input style={styles.Input} onChangeText={setPhuongThucBon} value={PhuongThucBon} />
                         {/* <Textarea rowSpan={5} bordered placeholder="Textarea" /> */}
                     </Item>
                     <Item stackedLabel>
-                        <Label>Tên thương phẩm</Label>
-                        <Input style={styles.Input} onChangeText={setThuongPhamPhanBon} value={ThuongPhamPhanBon}/>
+                        <Label style={{fontWeight:'bold'}}>Tên thương phẩm</Label>
+                        <Input style={styles.Input} onChangeText={setThuongPhamPhanBon} value={ThuongPhamPhanBon} />
                         {/* <Textarea rowSpan={5} bordered placeholder="Textarea" /> */}
                     </Item>
                     <Item stackedLabel>
-                        <Label>Lượng phân sử dụng</Label>
-                        <Input style={styles.Input} onChangeText={setLuongPhanSuDung} value={LuongPhanSuDung}/>
+                        <Label style={{fontWeight:'bold'}}>Lượng phân sử dụng</Label>
+                        <Input style={styles.Input} onChangeText={setLuongPhanSuDung} value={LuongPhanSuDung} />
                         {/* <Textarea rowSpan={5} bordered placeholder="Textarea" /> */}
                     </Item>
                     <View style={{ justifyContent: 'center', alignItems: 'center', marginTop: 20 }}>
@@ -192,28 +195,28 @@ const addFertilizer = (props) => {
                 /> */}
             </Content>
             <Modal
-                    style={{ width: '90%', height: 320, borderRadius: 10, paddingVertical: 20, justifyContent: 'center', alignItems: 'center' }}
-                    swipeToClose={false}
-                    onClosed={dismiss}
-                    backdropPressToClose={false}
-                    // onOpened={this.onOpen}
-                    backButtonClose={false}
-                    position={"center"}
-                    isOpen={showtime}
+                style={{ width: '90%', height: 320, borderRadius: 10, paddingVertical: 20, justifyContent: 'center', alignItems: 'center' }}
+                swipeToClose={false}
+                onClosed={dismiss}
+                backdropPressToClose={false}
+                // onOpened={this.onOpen}
+                backButtonClose={false}
+                position={"center"}
+                isOpen={showtime}
+            >
+                {/* <Text style={[styles.text, { fontSize: 20 }]}>{this.state.type == 'start' ? 'Ngày cấp thẻ cư trú' : 'Ngày hết hạn thẻ cư trú'}</Text> */}
+                <DatePicker
+                    locale={'vi'}
+                    date={date}
+                    mode={'date'}
+                    onDateChange={handleConfirm}
+                />
+                <TouchableOpacity style={{ width: 100, height: 40, borderRadius: 10, backgroundColor: colorDefault, justifyContent: 'center', alignItems: 'center', marginTop: 20 }}
+                    onPress={dismiss}
                 >
-                    {/* <Text style={[styles.text, { fontSize: 20 }]}>{this.state.type == 'start' ? 'Ngày cấp thẻ cư trú' : 'Ngày hết hạn thẻ cư trú'}</Text> */}
-                    <DatePicker
-                        locale={'vi'}
-                        date={date}
-                        mode={'date'}
-                        onDateChange={handleConfirm}
-                    />
-                    <TouchableOpacity style={{ width: 100, height: 40, borderRadius: 10, backgroundColor: colorDefault, justifyContent: 'center', alignItems: 'center', marginTop: 20 }}
-                        onPress={dismiss}
-                    >
-                        <Text style={{ color: '#fff' }}>Xong</Text>
-                    </TouchableOpacity>
-                </Modal>
+                    <Text style={{ color: '#fff' }}>Xong</Text>
+                </TouchableOpacity>
+            </Modal>
         </Container>
     )
 }
@@ -252,14 +255,14 @@ const styles = {
         marginBottom: 10,
     },
     Input: {
-        fontSize: fontSize(15), color: '#515C6F'
+        fontSize: 15, color: '#515C6F'
     },
     view_phone: { flexDirection: 'row', alignItems: 'center', backgroundColor: colorDefault, borderRadius: 5, justifyContent: 'center', height: 50, width: 200, marginTop: 20 },
     txt_login_phone: { color: '#fff', fontWeight: '700' },
-    icon_input :{
-        width:20,
-        height:20,
-        resizeMode:'contain'
+    icon_input: {
+        width: 20,
+        height: 20,
+        resizeMode: 'contain'
     },
     css_loading: {
         position: 'absolute',

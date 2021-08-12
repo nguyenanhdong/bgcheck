@@ -54,7 +54,12 @@ const Login = props => {
                     if (resJson.error_code == 0) {
                         props.navigation.dispatch(resetAction);
                         let data = resJson.data;
-                        dispatch(loginSuccess(data))
+                        data.Token = resJson.Token
+                        dispatch(loginSuccess(data));
+                        Storage.save({
+                            key: 'userLogin', // Note: Do not use underscore("_") in key!
+                            data: JSON.stringify(dataInput)
+                        });
                     } else {
                         showMessage({
                             message: resJson?.error_msg || 'Có lỗi xảy ra. Vui lòng thử lại sau ít phút',

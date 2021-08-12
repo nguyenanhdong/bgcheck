@@ -34,7 +34,7 @@ const App = (props) => {
                 showDraw={_Draw}
             />
             <View style={{justifyContent:'center',flex:1}}>
-                <View style={{top:-60}}><HomeSlide /></View>
+                <View style={{flex:1}}><HomeSlide /></View>
                 
             </View>
             
@@ -43,7 +43,12 @@ const App = (props) => {
             style={{backgroundColor:colorDefault,justifyContent:'center',alignItems:'center',height:60,position:'absolute',bottom:0,width:'100%'}}
             onPress = {goCheck}
             >
-                <Text style={{color:'#fff'}}>Kiểm tra mã</Text>
+                <View style={{justifyContent:'center',alignItems:'center'}}>
+                <Image source={require('@assets/Images/Common/qr_code.png')} style={{width:30,height:30}}/>
+                <Text style={{color:'#fff'}}>Quét QRCode</Text>
+                </View>
+                
+                
             </Button>
         </Container>
     )

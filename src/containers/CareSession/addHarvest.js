@@ -30,7 +30,6 @@ const addHarvest = (props) => {
     const [Note, setNote] = useState('');
     const [loading, setLoading] = useState(false);
     const DotChamSoc_Id = props.navigation?.state?.params?.DotChamSoc_Id || 0;
-    console.log('DotChamSoc_Id', props.navigation?.state?.params)
     const validate = () => {
         if (!MaTruyXuat || !khoiluong) {
             Alert.alert('Bạn cần điền đẩy đủ thông tin các trường có dấu *');
@@ -45,16 +44,20 @@ const addHarvest = (props) => {
 
         setLoading(true);
         let dataInput = {
-            CompanyId: userInfo?.DepartmentId,
-            NguoiTao: userInfo.Id,
-            Id: 0,
-            DotChamSoc_Id: DotChamSoc_Id,
-            MaTruyXuat: MaTruyXuat,
-            VatChuaSo: vatchua,
-            KhoiLuong: khoiluong,
-            GhiChu: Note,
-            NgayThuHoach: moment(date).format('DD/MM/YYYY')
+            model: {
+                CompanyId: userInfo?.DepartmentId,
+                NguoiTao: userInfo.Id,
+                Id: 0,
+                DotChamSoc_Id: DotChamSoc_Id,
+                MaTruyXuat: MaTruyXuat,
+                VatChuaSo: vatchua,
+                KhoiLuong: khoiluong,
+                GhiChu: Note,
+                NgayThuHoach: moment(date).format('DD/MM/YYYY')
+            },
+            token:userInfo.Token
         }
+        console.log('dataInput CreateThuHoach',dataInput)
         axios.post(`${BASE_URL}API/CreateThuHoach`, dataInput, {
             headers: {
                 'Accept': 'application/json',
@@ -124,7 +127,7 @@ const addHarvest = (props) => {
             <Content>
                 <Form >
                     <Item stackedLabel>
-                        <Label>Ngày thu hoạch<Text style={{ color: 'red' }}>*</Text></Label>
+                        <Label style={{fontWeight:'bold'}}>Ngày thu hoạch<Text style={{ color: 'red' }}>*</Text></Label>
                         <TouchableOpacity
                             onPress={showModalTime}
                             style={{ flexDirection: 'row', justifyContent: 'space-between', width: deviceWidth - 25, paddingTop: 15 }}
@@ -137,21 +140,21 @@ const addHarvest = (props) => {
                         </TouchableOpacity>
                     </Item>
                     <Item stackedLabel>
-                        <Label>Mã truy xuất<Text style={{ color: 'red' }}>*</Text></Label>
+                        <Label style={{fontWeight:'bold'}}>Mã truy xuất<Text style={{ color: 'red' }}>*</Text></Label>
                         <Input style={styles.Input} onChangeText={setMaTruyXuat} value={MaTruyXuat} />
                     </Item>
 
                     <Item stackedLabel>
-                        <Label>Vật chứa số</Label>
+                        <Label style={{fontWeight:'bold'}}>Vật chứa số</Label>
                         <Input style={styles.Input} onChangeText={setVatchua} value={vatchua} />
                     </Item>
                     <Item stackedLabel>
-                        <Label>Khối lượng<Text style={{ color: 'red' }}>*</Text></Label>
+                        <Label style={{fontWeight:'bold'}}>Khối lượng<Text style={{ color: 'red' }}>*</Text></Label>
                         <Input style={styles.Input} onChangeText={setKhoiluong} value={khoiluong} />
                         {/* <Textarea rowSpan={5} bordered placeholder="Textarea" /> */}
                     </Item>
                     <Item stackedLabel>
-                        <Label>Ghi chú</Label>
+                        <Label style={{fontWeight:'bold'}}>Ghi chú</Label>
                         <Input style={styles.Input} onChangeText={setNote} value={Note} />
                         {/* <Textarea rowSpan={5} bordered placeholder="Textarea" /> */}
                     </Item>
@@ -173,31 +176,31 @@ const addHarvest = (props) => {
                     display={'spinner'}
                 /> */}
 
-                
+
             </Content>
             <Modal
-                    style={{ width: '90%', height: 320, borderRadius: 10, paddingVertical: 20, justifyContent: 'center', alignItems: 'center' }}
-                    swipeToClose={false}
-                    onClosed={dismiss}
-                    backdropPressToClose={false}
-                    // onOpened={this.onOpen}
-                    backButtonClose={false}
-                    position={"center"}
-                    isOpen={showtime}
+                style={{ width: '90%', height: 320, borderRadius: 10, paddingVertical: 20, justifyContent: 'center', alignItems: 'center' }}
+                swipeToClose={false}
+                onClosed={dismiss}
+                backdropPressToClose={false}
+                // onOpened={this.onOpen}
+                backButtonClose={false}
+                position={"center"}
+                isOpen={showtime}
+            >
+                {/* <Text style={[styles.text, { fontSize: 20 }]}>{this.state.type == 'start' ? 'Ngày cấp thẻ cư trú' : 'Ngày hết hạn thẻ cư trú'}</Text> */}
+                <DatePicker
+                    locale={'vi'}
+                    date={date}
+                    mode={'date'}
+                    onDateChange={handleConfirm}
+                />
+                <TouchableOpacity style={{ width: 100, height: 40, borderRadius: 10, backgroundColor: colorDefault, justifyContent: 'center', alignItems: 'center', marginTop: 20 }}
+                    onPress={dismiss}
                 >
-                    {/* <Text style={[styles.text, { fontSize: 20 }]}>{this.state.type == 'start' ? 'Ngày cấp thẻ cư trú' : 'Ngày hết hạn thẻ cư trú'}</Text> */}
-                    <DatePicker
-                        locale={'vi'}
-                        date={date}
-                        mode={'date'}
-                        onDateChange={handleConfirm}
-                    />
-                    <TouchableOpacity style={{ width: 100, height: 40, borderRadius: 10, backgroundColor: colorDefault, justifyContent: 'center', alignItems: 'center', marginTop: 20 }}
-                        onPress={dismiss}
-                    >
-                        <Text style={{ color: '#fff' }}>Xong</Text>
-                    </TouchableOpacity>
-                </Modal>
+                    <Text style={{ color: '#fff' }}>Xong</Text>
+                </TouchableOpacity>
+            </Modal>
         </Container>
     )
 }
