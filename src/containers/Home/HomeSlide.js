@@ -77,7 +77,7 @@ export default class SlideshowTest extends React.Component {
   }
   renderSlideBanner = (item,index) => {
     return(
-      <TouchableOpacity
+      <View
         activeOpacity={0.7}
         style={{width:deviceWidth}}
         key={`swiper_${index}`}
@@ -95,7 +95,7 @@ export default class SlideshowTest extends React.Component {
         // resizeMethod="resize"
         resizeMode="contain"
           />
-      </TouchableOpacity>
+      </View>
     )
   }
   onScrollEnd = (e) => {

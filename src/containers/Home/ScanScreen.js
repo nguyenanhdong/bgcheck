@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, Alert, ActivityIndicator,Linking } from 'react-native';
 import SubmitCodeText from './SubmitCodeText'
 import { ImageBackground } from 'react-native';
 import { RNCamera } from 'react-native-camera';
@@ -13,7 +13,7 @@ import moment from "moment";
 import Load from "./load";
 import { debounce } from "lodash";
 import { Container, Content, Button, ListItem, ScrollableTab, Tab, Tabs } from 'native-base';
-
+import { Snackbar } from 'react-native-paper';
 const AREA_WIDTH = deviceWidth / 3 * 2;
 const ScanScreen = (props) => {
     let unmounted = false;
@@ -39,7 +39,9 @@ const ScanScreen = (props) => {
     const [inputLayout, setInputLayout] = React.useState(null)
     const [areaLayout, setAreaLayout] = React.useState(null)
     const [lightLayout, setLightLayout] = React.useState(null)
-
+    const [visible, setVisible] = React.useState(false);
+    const [link, checkLink] = React.useState(false);
+    const [scanRsult, setResult] = React.useState('');
     const handleCameraReady = () => {
         setCameraReady(true)
     }
@@ -124,8 +126,11 @@ const ScanScreen = (props) => {
                     BoxLoad.hideload();
             });
     }
+    const isValidURL = (string) => {
+        var res = string.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
+        return (res !== null)
+    };
     const onBarCodeRead = (scanResult) => {
-        console.log('onBarCodeRead', scanResult);
         if (unmounted) return;
         if (
             (scanResult.type == "QR_CODE" || scanResult.type == "org.iso.QRCode")
@@ -135,30 +140,44 @@ const ScanScreen = (props) => {
             )
         ) {
             if (!unmounted) {
-                console.log('123123');
                 unmounted = true;
                 getdata(scanResult.data);
             }
             return;
         } else {
-            console.log('vao day', showAlert)
-            if (!showAlert) {
-                showAlert = true;
-                Alert.alert('Sản phẩm chưa đăng ký trên cổng',
-                    '',
-                    [
-                        {
-                            text: 'Ok',
-                            onPress: () => showAlert = false,
-                        }
-                    ]);
+            // if (!showAlert) {
+            //     showAlert = true;
+            //     Alert.alert('Sản phẩm chưa đăng ký trên cổng',
+            //         '',
+            //         [
+            //             {
+            //                 text: 'Ok',
+            //                 onPress: () => showAlert = false,
+            //             }
+            //         ]);
 
-            }
+            // }
+            setResult(scanResult.data)
+            setVisible(true);
+            // console.log('scanResult',isValidURL(scanResult.data))
+            checkLink(isValidURL(scanResult.data))
         }
     }
+
+    const onDismissSnackBar = () => setVisible(false);
     const goback = () => {
         console.log('goback');
         props.navigation.goBack()
+    }
+    const _onPressSnackbar = ()=>{
+        console.log('vao day',link)
+        if(link){
+            console.log('_onPressSnackbar',scanRsult)
+            Linking.openURL(scanRsult);
+        }else{
+            setVisible(false);
+        }
+        
     }
     return (
         <RNCamera
@@ -205,6 +224,15 @@ const ScanScreen = (props) => {
                     </View>
                     <Text style={{ color: '#fff' }}>{"Kiểm tra thông tin sản phẩm"}</Text>
                 </View>
+                <Snackbar
+                    visible={visible}
+                    onDismiss={onDismissSnackBar}
+                    action={{
+                        label: link ? 'Mở' : 'Đóng',
+                        onPress: _onPressSnackbar,
+                    }}>
+                    {scanRsult}
+                </Snackbar>
             </View>
         </RNCamera>
     )
