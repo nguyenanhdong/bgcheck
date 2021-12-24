@@ -11,6 +11,7 @@ import AddHarvest from '@containers/CareSession/addHarvest';
 import AddCaregarden from '@containers/CareSession/addCaregarden';
 import AddprotectProduct from '@containers/CareSession/addprotectProduct';
 import AddFertilizer from '@containers/CareSession/addFertilizer';
+import AddProcedure from '@containers/CareSession/addProcedure';
 const AppNavigator = createStackNavigator(
     {
         // Main,
@@ -24,7 +25,8 @@ const AppNavigator = createStackNavigator(
         AddHarvest,
         AddCaregarden,
         AddprotectProduct,
-        AddFertilizer
+        AddFertilizer,
+        AddProcedure
     },
     {
         headerMode: 'none',

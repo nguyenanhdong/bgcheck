@@ -33,7 +33,7 @@ const App = (props) => {
         { key: 'first', title: 'Thông tin' },
         { key: 'second', title: 'Đại lý - NCC' },
         { key: 'three', title: 'Đánh giá' },
-        { key: 'four', title: 'Nhật ký ' },
+        { key: 'four', title: 'Nhật ký ' }
     ]);
     const [index, setIndex] = React.useState(0);
     const productInfo = props.navigation.state.params.productInfo;
@@ -47,7 +47,7 @@ const App = (props) => {
             case 'three':
                 return <Tab3 productInfo={productInfo} />;
             case 'four':
-              return <Tab4 productInfo={productInfo} />;
+                return <Tab4 productInfo={productInfo} />;
             default:
                 return null;
         }
@@ -55,7 +55,7 @@ const App = (props) => {
     const Verify = (temCode) => {
         boxload.showload();
         let url = `${BASE_URL}API/Verify?temId=${productInfo.temID}&temCode=${temCode}`;
-        console.log('url',url)
+        console.log('url', url)
         axios.get(url, {}, {
             headers: {
                 'Accept': 'application/json',

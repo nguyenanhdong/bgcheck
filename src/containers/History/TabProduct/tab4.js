@@ -6,7 +6,7 @@ import SafeAreaView from '@components/SafeAreaView';
 import axios from 'axios';
 import FastImage from 'react-native-fast-image';
 import { useSelector, useDispatch } from "react-redux";
-import { colorDefault, deviceWidth, deviceHeight, isAndroid, urlAPI, headersRequest,showTime } from '@assets/constants';
+import { colorDefault, deviceWidth, deviceHeight, isAndroid, urlAPI, headersRequest, showTime } from '@assets/constants';
 import { Container, Content, ListItem } from 'native-base';
 import { RadioButton } from 'react-native-paper';
 import { TouchableRipple } from 'react-native-paper';
@@ -14,7 +14,7 @@ import { TouchableRipple } from 'react-native-paper';
 const App = (props) => {
     const { productInfo } = props;
     const [checked, setChecked] = React.useState('thuhoach');
-    const [data, setData] = React.useState(productInfo?.SoTheoDoiThuHoach||[]);
+    const [data, setData] = React.useState(productInfo?.SoTheoDoiThuHoach || []);
     const ItemThuhoach = ({ item }) => {
         return (
             <ListItem style={styles.listcontent} noIndent>
@@ -62,6 +62,16 @@ const App = (props) => {
             </ListItem>
         )
     }
+
+    const ItemQuyTrinh = ({ item }) => {
+        return (
+            <ListItem style={styles.listcontent} noIndent>
+                <Text>Ngày: {showTime(item.Ngay)}</Text>
+                <Text>Nội dung: {item.NoiDung}</Text>
+            </ListItem>
+        )
+    }
+
     const Item = ({ item }) => {
         switch (checked) {
             case 'thuhoach':
@@ -72,11 +82,13 @@ const App = (props) => {
                 return <ItemThuocBVTV item={item} />;
             case 'phanbon':
                 return <ItemPhanBon item={item} />;
+            case 'quytrinh':
+                return <ItemQuyTrinh item={item} />;
             default:
                 return null;
         }
     }
-    const Select = value=>{
+    const Select = value => {
         setChecked(value);
         switch (value) {
             case 'thuhoach':
@@ -91,6 +103,9 @@ const App = (props) => {
             case 'phanbon':
                 setData(productInfo.SoTheoDoiPhanBon)
                 return;
+            case 'quytrinh':
+                setData(productInfo.QuyTrinh)
+                return;
             default:
                 return [];
         }
@@ -101,11 +116,11 @@ const App = (props) => {
                 flexDirection: "column",
                 alignItems: "center"
             }}>
-                <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', flexWrap: 'wrap',borderBottomWidth:1,borderBottomColor:'#ccc' }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', flexWrap: 'wrap', borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
                     {tab.map((item, index) => {
                         return (
                             <TouchableRipple
-                                onPress={()=>Select(item.value)}
+                                onPress={() => Select(item.value)}
                                 style={{ marginRight: 10, marginTop: 10 }}
                             >
                                 <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
@@ -127,7 +142,7 @@ const App = (props) => {
             {data.map(item => {
                 return <Item item={item} />
             })}
-            {data.length == 0 && <Text style={{textAlign:'center',marginTop:40}}>Danh sách trống</Text>}
+            {data.length == 0 && <Text style={{ textAlign: 'center', marginTop: 40 }}>Danh sách trống</Text>}
         </Content>
     )
 }
@@ -150,12 +165,16 @@ const tab = [
         value: 'phanbon',
         label: 'Phân bón'
     },
+    {
+        value: 'quytrinh',
+        label: 'Quy trình'
+    },
 ]
 const styles = {
     container: {
         flex: 1,
         flexDirection: 'row',
     },
-    listcontent: { flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', backgroundColor: '#fff',marginTop:1 },
+    listcontent: { flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start', backgroundColor: '#fff', marginTop: 1 },
 
 }
