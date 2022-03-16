@@ -1,9 +1,9 @@
 import React from 'react';
 import Slideshow from '@components/Slideshow';
-import { BASE_URL, colorDefault ,deviceHeight,deviceWidth} from '@assets/constants';
+import { BASE_URL, colorDefault, deviceHeight, deviceWidth, checkIphoneX } from '@assets/constants';
 import axios from 'axios';
 import { showMessage } from 'react-native-flash-message';
-import { ActivityIndicator,View,FlatList,TouchableOpacity,Platform } from 'react-native';
+import { ActivityIndicator, View, FlatList, TouchableOpacity, Platform } from 'react-native';
 import FastImage from 'react-native-fast-image'
 import { getStatusBarHeight } from 'react-native-status-bar-height'
 
@@ -75,26 +75,21 @@ export default class SlideshowTest extends React.Component {
         self.setState({ load: false })
       });
   }
-  renderSlideBanner = (item,index) => {
-    return(
+  renderSlideBanner = (item, index) => {
+    return (
       <View
         activeOpacity={0.7}
-        style={{width:deviceWidth}}
+        style={{ width: deviceWidth }}
         key={`swiper_${index}`}
-        >
-        {/* <Image
-          source={{uri: item.image}}
+      >
+        <FastImage
           style={styles.img_slide}
-          resizeMethod="resize"
-        /> */}
-          <FastImage
-          style={styles.img_slide}
-          source={{
-            uri: item.url
-        }}
-        // resizeMethod="resize"
-        resizeMode="contain"
-          />
+          source={{uri: item.url.replace('https:', 'http:')}}
+          // source={{
+          //   uri: item.url
+          // }}
+          resizeMode={FastImage.resizeMode.contain}
+        />
       </View>
     )
   }
@@ -104,11 +99,11 @@ export default class SlideshowTest extends React.Component {
 
     // Divide the horizontal offset by the width of the view to see which page is visible
     let pageNum = Math.round(contentOffset.x / viewSize.width);
-    this.setState({indexSlide:pageNum});
+    this.setState({ indexSlide: pageNum });
   }
   render() {
     console.log('render');
-    let { dataSource, position, load,indexSlide } = this.state;
+    let { dataSource, position, load, indexSlide } = this.state;
     if (load)
       return (
         <View style={styles.css_loading}>
@@ -118,24 +113,24 @@ export default class SlideshowTest extends React.Component {
 
     return (
       <View style={styles.box_slide}>
-                <FlatList
-                  horizontal
-                  pagingEnabled={true}
-                  showsHorizontalScrollIndicator={false}
-                  legacyImplementation={false}
-                  data={dataSource}
-                  renderItem={({item,index}) => this.renderSlideBanner(item,index)}
-                  keyExtractor={(item,index) => index.toString()}
-                  style={{width: '100%'}}
-                  onMomentumScrollEnd={this.onScrollEnd}
-              />
-              {dataSource.length > 1 && <View style={styles.pageSlide}>
-                  {dataSource.map((item,index)=>(
-                    <View key={`slide_${index}`} style={[styles.doted,indexSlide == index && styles.doted_active, index == (dataSource.length - 1) && {marginRight:0} ]} >
-                    </View>
-                  ))}
-              </View>}
+        <FlatList
+          horizontal
+          pagingEnabled={true}
+          showsHorizontalScrollIndicator={false}
+          legacyImplementation={false}
+          data={dataSource}
+          renderItem={({ item, index }) => this.renderSlideBanner(item, index)}
+          keyExtractor={(item, index) => index.toString()}
+          style={{ width: '100%' }}
+          onMomentumScrollEnd={this.onScrollEnd}
+        />
+        {dataSource.length > 1 && <View style={styles.pageSlide}>
+          {dataSource.map((item, index) => (
+            <View key={`slide_${index}`} style={[styles.doted, indexSlide == index && styles.doted_active, index == (dataSource.length - 1) && { marginRight: 0 }]} >
             </View>
+          ))}
+        </View>}
+      </View>
       // <Slideshow
       //   dataSource={dataSource}
       //   position={position}
@@ -158,37 +153,37 @@ const styles = {
     width: '100%',
     height: '100%',
     borderWidth: 1,
-    backgroundColor:'rgba(0,0,0,0.5)'
-},
-box_slide: {
-  marginTop: 15,
-  borderRadius: 6,
-  paddingBottom: 10,
-  // overflow: 'hidden',
-  width:'100%',
-},
-pageSlide:{
-  flexDirection:'row',
-  justifyContent:'center',
-  position:'relative',
-  top:17
-},
-doted_active:{
-  backgroundColor:'#f15a29'
-},
-doted:{
-  width:10,
-  height:10,
-  borderRadius:5,
-  marginRight:8,
-  backgroundColor:'gray'
-},
-swiper: {
-  height: 200,
-},
-img_slide: {
-  width: '100%',
-  height: deviceHeight - 60 - HEADER_HEIGHT - 40,
-  // resizeMode: 'stretch',
-},
+    backgroundColor: 'rgba(0,0,0,0.5)'
+  },
+  box_slide: {
+    marginTop: 15,
+    borderRadius: 6,
+    paddingBottom: 10,
+    // overflow: 'hidden',
+    width: '100%',
+  },
+  pageSlide: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    position: 'relative',
+    top: 17
+  },
+  doted_active: {
+    backgroundColor: '#f15a29'
+  },
+  doted: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    marginRight: 8,
+    backgroundColor: 'gray'
+  },
+  swiper: {
+    height: 200,
+  },
+  img_slide: {
+    width: '100%',
+    height: deviceHeight - 60 - HEADER_HEIGHT -( checkIphoneX ? 80 : 60)
+    // resizeMode: 'stretch',
+  },
 }

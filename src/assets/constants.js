@@ -14,7 +14,7 @@ export const width_90_percent = (deviceWidth / 100) * 90;
 export const provider = 'FastJob';
 export const minWidthDevice = (deviceWidth <= 320) ? true : false;
 // export const BASE_URL = "http://113.160.154.188:1102/Api";
-export const BASE_URL = "http://truyxuatbg.com/";
+export const BASE_URL = "http://txng.bacgiang.gov.vn/";
 export const isAndroid = Platform.OS === 'ios' ? false : true;
 export const headersRequest = {
   Accept: 'application/json',
